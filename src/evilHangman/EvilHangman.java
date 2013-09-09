@@ -12,11 +12,8 @@ import java.util.HashMap;
  */
 public class EvilHangman {
 	ArrayList<String> dictionary;
-	char[] guessesChar;
-	public int guessNum;
-	public int currentGuess;
-	public int gameState;
-
+	public UserInteraction toUser;
+	public Load input;
 
 	public static void main(String[] args){
 		//TODO load arg1 as dictionary
@@ -30,6 +27,7 @@ public class EvilHangman {
 	public int getUserWordLength(){
 		//TODO prompt user for number of letters in secret word 
 		//(check that it is positive, if not display error and terminate) 
+		//
 		return (Integer) null;
 	}
 	

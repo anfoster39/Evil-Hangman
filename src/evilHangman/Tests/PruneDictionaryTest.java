@@ -5,6 +5,8 @@ package evilHangman.Tests;
 
 import static org.junit.Assert.*;
 
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -19,6 +21,7 @@ import evilHangman.EvilHangman;
  *
  */
 public class PruneDictionaryTest {
+	private final ByteArrayOutputStream printMessage = new ByteArrayOutputStream();
 	HashMap<Integer, ArrayList<String>> testDictionary; 
 	EvilHangman test = new EvilHangman();
 
@@ -40,6 +43,8 @@ public class PruneDictionaryTest {
 		testDictionary.get(3).add("hat");
 		testDictionary.get(3).add("but");
 		
+		System.setOut(new PrintStream(printMessage));
+		
 	}
 
 	@Test
@@ -47,14 +52,16 @@ public class PruneDictionaryTest {
 		ArrayList<String> testWordListOne = new ArrayList<String>();
 		testWordListOne.add("a");
 		String message = new String("Prune Dictionary does not give the right Array List");
+		
 		assertTrue(message, test.pruneDictionary(testDictionary, 1).equals(testWordListOne));
 		
 	}
 	 
 	@Test
 	public void testNoNum() {
-		String message = new String("Prune Dictionary does not give nothing for a number that is not in the dictionary");
-		assertNull(message,test.pruneDictionary(testDictionary, 5));
+		String message = new String("Gives error message if there is no words of that length in the dictionary");
+		test.pruneDictionary(testDictionary, 5);
+		assertEquals(message, "Error Message", printMessage.toString());
 	}
 	
 	@Test
