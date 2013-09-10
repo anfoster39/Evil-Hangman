@@ -37,7 +37,7 @@ public class PrintAndGetResponseTest {
 	}
 		
 	@Test
-	public void printMessageAndIntInputTestIntInput() throws IOException{
+	public void printMessageAndIntInputTestIntInput(){
 		String message1 = new String ("failed to print the right string");
 		String message2 = new String ("failed to return the input");
 		
@@ -51,12 +51,28 @@ public class PrintAndGetResponseTest {
 	}
 	
 	@Test
+	public void printMessageAndIntInputTestNegIntInput(){
+		String message1 = new String ("failed to print the right string");
+		String message2 = new String ("failed to return negative input");
+		
+		System.setIn(new ByteArrayInputStream("-10".getBytes()));
+		UserInteraction.scanner = new Scanner (System.in);
+		String response = UserInteraction.printAndGetResponse("Enter a number");
+		int toInt = Integer.parseInt(response);
+		
+		assertEquals(message1, "Enter a number", printMessage.toString());
+		assertEquals(message2, -10, toInt);
+	
+	}
+	
+	@Test
 	public void printMessageAndIntInputTestStirngInput(){
 		
 		String message1 = new String ("failed to print the right string");
 		String message2 = new String ("failed to return the input as an int");
 		
 		System.setIn(new ByteArrayInputStream("ok".getBytes()));
+		UserInteraction.scanner = new Scanner (System.in);
 		String response = UserInteraction.printAndGetResponse("How are you today?");
 		
 		assertEquals(message1, "How are you today?", printMessage.toString());
@@ -66,8 +82,7 @@ public class PrintAndGetResponseTest {
 	@After
 	public void cleanUp() {
 	    System.setOut(null);
-	    System.setIn(null);
-	    UserInteraction.scanner = new Scanner (System.in);
+	    System.setIn(stdin);   
 	}
 
 

@@ -6,24 +6,33 @@ package evilHangman;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import evilHangman.Tests.GetUserWordLengthTest;
+import evilHangman.Tests.PruneDictionaryTest;
+
 /**
  * @author Anne
  *
  */
 public class EvilHangman {
-	ArrayList<String> dictionary;
-	public UserInteraction toUser;
-	public Load input;
+	HashMap <Integer, ArrayList<String>> dictionary;
 
-	public static void main(String[] args){
+	public EvilHangman(String filename){
 		//TODO load arg1 as dictionary
-		//TODO if no dictionary print message and load default
-		//TODO get word length
-		//TODO prune Dictionary
-		//TODO get number of guesses 
-		//TODO play Evil hangman
+		if (filename == null){
+			UserInteraction.printToScreen("No Dictionary file specified, using the dictionary.txt locted in current directory");
+			dictionary = Load.loadDictionary("/dictionary.txt");
+		}
+		else{
+			dictionary = Load.loadDictionary(filename);
+		}
 	}
 	
+	public void play(){
+		int wordLength = getUserWordLength();
+		ArrayList<String>Words = pruneDictionary(dictionary, wordLength);
+		int guessesNum = getUserGuesses();
+		playEvil(Words, guessesNum, 0, wordLength, new  ArrayList<Character>());
+	}
 	public int getUserWordLength(){
 		//TODO prompt user for number of letters in secret word 
 		//(check that it is positive, if not display error and terminate) 
@@ -56,11 +65,13 @@ public class EvilHangman {
 	public char getGuess(){
 		//TODO ask to enter a guess
 		//TODO check that user entered a char, if not repeat
+		//TODO check that it is not a duplicate char
 		return (Character) null;
 	}
 	
 	public ArrayList<String> discardWords(ArrayList<String> wordList, char letter){
 		//TODO go through each word and discard it if it has the letter in it
+		//TODO return null if no changes occurred or if all are removed
 		return null;
 	}
 	
@@ -73,9 +84,18 @@ public class EvilHangman {
 		//TODO loop back
 	}
 	
+	public boolean guessedWord(String word, ArrayList<Character> guesses){
+		//check is word is all guessed
+		return false;
+	}
+	
+	public boolean checkLetterInWord(String word, char letter){
+		//check if letter is in word
+		return false;
+	}
+	
 	public void endGame(Boolean win, String word){
 		//TODO print out if player won or lost and the word if they lost
-		//TODO ask if want to play again
 	}
 	
 }

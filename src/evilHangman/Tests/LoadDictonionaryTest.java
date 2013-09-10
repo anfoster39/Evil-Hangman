@@ -18,7 +18,7 @@ public class LoadDictonionaryTest {
 	 * @throws java.lang.Exception
 	 */
 	@Before
-	public void setUp() throws Exception {
+	public void setUp(){
 	}
 
 	@Test

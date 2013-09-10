@@ -21,7 +21,7 @@ import evilHangman.EvilHangman;
  */
 public class GetUserWordLengthTest {
 	private final ByteArrayOutputStream printMessage = new ByteArrayOutputStream();
-	EvilHangman test = new EvilHangman();
+	EvilHangman test = new EvilHangman(null);
 	
 	/**
 	 * @throws java.lang.Exception
