@@ -16,6 +16,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import evilHangman.EvilHangman;
+import evilHangman.NoExitManager;
 import evilHangman.UserInteraction;
 
 /**
@@ -25,28 +26,34 @@ import evilHangman.UserInteraction;
 public class GetUserGuessNumTest {
 	private final ByteArrayOutputStream printMessage = new ByteArrayOutputStream();
 	private final InputStream stdin = System.in;
-	EvilHangman test = new EvilHangman(null);
+	EvilHangman test = new EvilHangman();
 
 	@Before
 	public void setUp() {
 	    System.setOut(new PrintStream(printMessage));
+	    System.setSecurityManager(new NoExitManager(System.getSecurityManager()));
 	}
 
 	@Test
 	public void okNumber(){
 		String message = new String ("failed to return the ok number");
+		String message1 = new String ("failed to print prompt");
 		System.setIn(new ByteArrayInputStream("3\n".getBytes()));
+		UserInteraction.scanner = new Scanner (System.in);
+		
 		assertEquals(message, 3, test.getUserGuesses());
+		assertEquals(message1, "\nPlease enter the number of guesses you want: ", printMessage.toString());
 	}
 	
-	@Test
+	@Test(expected=SecurityException.class)
 	public void negativeNumber(){
 		String message = new String ("failed to print error message and exit on negative number");
 		System.setIn(new ByteArrayInputStream("-5\n".getBytes()));
 		UserInteraction.scanner = new Scanner (System.in);
 		test.getUserGuesses();
 		
-		assertEquals(message, "Negative Error Message", printMessage.toString());
+		assertEquals(message, "\nPlease enter the number of guesses you want: "
+		+ "You cannot have 0 or less guesses. Goodbye\n", printMessage.toString());
 	}
 	
 	@Test
@@ -56,8 +63,12 @@ public class GetUserGuessNumTest {
 		System.setIn(new ByteArrayInputStream("100\n".getBytes()));
 		UserInteraction.scanner = new Scanner (System.in);
 		
-		assertEquals(message, "Large Number Error Message", printMessage.toString());
-		assertEquals(message2, 26, test.getUserGuesses());
+		int guesses = test.getUserGuesses();
+		
+		assertEquals(message, "\nPlease enter the number of guesses you want: " + 
+				"\nThere are only 26 letters in the alphabet, you can have at most 26 guesses. " +
+					"You will have 26 guesses.\n", printMessage.toString());
+		assertEquals(message2, 26, guesses);
 	}
 		
 	@After

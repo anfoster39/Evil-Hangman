@@ -7,7 +7,6 @@ import static org.junit.Assert.*;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintStream;
 import java.util.Scanner;
@@ -26,7 +25,7 @@ import evilHangman.UserInteraction;
  * 
  * 
  */
-public class PrintAndGetResponseTest {
+public class PrintAndGetResponseIntTest {
 	private final ByteArrayOutputStream printMessage = new ByteArrayOutputStream();
 	private final InputStream stdin = System.in;
 	EvilHangman test = new EvilHangman();
@@ -37,47 +36,61 @@ public class PrintAndGetResponseTest {
 	}
 		
 	@Test
-	public void printMessageAndIntInputTestIntInput(){
+	public void testIntInput(){
 		String message1 = new String ("failed to print the right string");
 		String message2 = new String ("failed to return the input");
 		
 		System.setIn(new ByteArrayInputStream("3".getBytes()));
-		String response = UserInteraction.printAndGetResponse("Enter a number");
-		int toInt = Integer.parseInt(response);
+		UserInteraction.scanner = new Scanner (System.in);
+		int response = UserInteraction.printAndGetResponseInt("Enter a number");
 		
 		assertEquals(message1, "Enter a number", printMessage.toString());
-		assertEquals(message2, 3, toInt);
+		assertEquals(message2, 3, response);
 	
 	}
 	
 	@Test
-	public void printMessageAndIntInputTestNegIntInput(){
+	public void testNegIntInput(){
 		String message1 = new String ("failed to print the right string");
 		String message2 = new String ("failed to return negative input");
 		
 		System.setIn(new ByteArrayInputStream("-10".getBytes()));
 		UserInteraction.scanner = new Scanner (System.in);
-		String response = UserInteraction.printAndGetResponse("Enter a number");
-		int toInt = Integer.parseInt(response);
+		int response = UserInteraction.printAndGetResponseInt("Enter a number");
 		
 		assertEquals(message1, "Enter a number", printMessage.toString());
-		assertEquals(message2, -10, toInt);
+		assertEquals(message2, -10, response);
 	
 	}
 	
 	@Test
-	public void printMessageAndIntInputTestStirngInput(){
-		
+	public void testSpacesInput(){
 		String message1 = new String ("failed to print the right string");
-		String message2 = new String ("failed to return the input as an int");
+		String message2 = new String ("failed to return input without spaces");
 		
-		System.setIn(new ByteArrayInputStream("ok".getBytes()));
+		System.setIn(new ByteArrayInputStream("   5".getBytes()));
 		UserInteraction.scanner = new Scanner (System.in);
-		String response = UserInteraction.printAndGetResponse("How are you today?");
+		int response = UserInteraction.printAndGetResponseInt("Enter a number");
 		
-		assertEquals(message1, "How are you today?", printMessage.toString());
-		assertEquals(message2, "ok", response);
+		assertEquals(message1, "Enter a number", printMessage.toString());
+		assertEquals(message2, 5, response);
+	
 	}
+	
+	@Test
+	public void testMultipleSpacesInput(){
+		String message1 = new String ("failed to print the right string");
+		String message2 = new String ("failed to return input without spaces and second int");
+		
+		System.setIn(new ByteArrayInputStream("   5  2".getBytes()));
+		UserInteraction.scanner = new Scanner (System.in);
+		int response = UserInteraction.printAndGetResponseInt("Enter a number");
+		
+		assertEquals(message1, "Enter a number", printMessage.toString());
+		assertEquals(message2, 5, response);
+	
+	}
+	
 	
 	@After
 	public void cleanUp() {

@@ -7,9 +7,9 @@ import static org.junit.Assert.*;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintStream;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 import org.junit.After;
@@ -26,11 +26,13 @@ import evilHangman.UserInteraction;
 public class getGuessTest {
 	private final ByteArrayOutputStream printMessage = new ByteArrayOutputStream();
 	private final InputStream stdin = System.in;
-	EvilHangman test = new EvilHangman(null);
+	EvilHangman test = new EvilHangman();
+	private ArrayList<Character> guessList; 
 
 	@Before
 	public void setUp() {
 	    System.setOut(new PrintStream(printMessage));
+	    guessList = new ArrayList<Character>();
 	}
 		
 	@Test
@@ -38,25 +40,38 @@ public class getGuessTest {
 		String message1 = new String ("failed to get correct input");
 		String message2 = new String ("failed to print message");
 		
-		System.setIn(new ByteArrayInputStream("a".getBytes()));
-		char result = test.getGuess();
+		System.setIn(new ByteArrayInputStream("a\n".getBytes()));
+		UserInteraction.scanner = new Scanner (System.in);
 		
-		assertEquals(message2, "Ask to enter guess", printMessage.toString());
+		char result = test.getGuess(guessList);
+		
+		assertEquals(message2, "\nWhat is your guess? ", printMessage.toString());
+		assertEquals(message1, 'a', result);
+	}
+	
+	@Test
+	public void UppercaseTest(){
+		String message1 = new String ("failed to convert uppercase to lowercase");
+		String message2 = new String ("failed to print message");
+		
+		System.setIn(new ByteArrayInputStream("A\n".getBytes()));
+		UserInteraction.scanner = new Scanner (System.in);
+		char result = test.getGuess(guessList);
+		
+		assertEquals(message2, "\nWhat is your guess? ", printMessage.toString());
 		assertEquals(message1, 'a', result);
 	}
 	
 	@Test
 	public void numberInputTest(){
 		String message1 = new String ("failed to print message");
-		String message2 = new String ("failed to reprint message");
 		String message3 = new String ("failed to get correct input");
 		
-		System.setIn(new ByteArrayInputStream("3/n h".getBytes()));
+		System.setIn(new ByteArrayInputStream("3 h".getBytes()));
 		UserInteraction.scanner = new Scanner (System.in);
-		char result = test.getGuess();
+		char result = test.getGuess(guessList);
 		
-		assertEquals(message1, "Message", printMessage.toString());
-		assertEquals(message2, "Message", printMessage.toString());
+		assertEquals(message1, "\nWhat is your guess? " + "\nPlease enter a letter: ", printMessage.toString());
 		assertEquals(message3, 'h', result);
 	
 	}
@@ -64,15 +79,13 @@ public class getGuessTest {
 	@Test
 	public void specialCharInputTest(){
 		String message1 = new String ("failed to print message");
-		String message2 = new String ("failed to reprint message");
 		String message3 = new String ("failed to get correct input");
 		
-		System.setIn(new ByteArrayInputStream("!/n b".getBytes()));
+		System.setIn(new ByteArrayInputStream("! b".getBytes()));
 		UserInteraction.scanner = new Scanner (System.in);
-		char result = test.getGuess();
+		char result = test.getGuess(guessList);
 		
-		assertEquals(message1, "Message", printMessage.toString());
-		assertEquals(message2, "Message", printMessage.toString());
+		assertEquals(message1, "\nWhat is your guess? " + "\nPlease enter a letter: ", printMessage.toString());
 		assertEquals(message3, 'b', result);
 	
 	}
@@ -82,13 +95,14 @@ public class getGuessTest {
 		String message1 = new String ("failed to print message");
 		String message2 = new String ("failed to reprint message");
 		
-		System.setIn(new ByteArrayInputStream("b/nb/nc".getBytes()));
-		UserInteraction.scanner = new Scanner (System.in);
-		test.getGuess();
-		char result = test.getGuess();
+		guessList.add('b');
 		
-		assertEquals(message1, "Message", printMessage.toString());
-		assertEquals(message1, "Message", printMessage.toString());
+		System.setIn(new ByteArrayInputStream("b c".getBytes()));
+		UserInteraction.scanner = new Scanner (System.in);
+		char result = test.getGuess(guessList);
+		
+		assertEquals(message1, "\nWhat is your guess? You have already guessed b"
+		+ "\nPlease enter a letter: ", printMessage.toString());
 		assertEquals(message2, 'c', result);
 	
 	}

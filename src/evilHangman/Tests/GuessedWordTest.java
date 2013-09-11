@@ -7,7 +7,6 @@ import static org.junit.Assert.*;
 
 import java.util.ArrayList;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -18,7 +17,7 @@ import evilHangman.EvilHangman;
  *
  */
 public class GuessedWordTest {
-	EvilHangman test = new EvilHangman(null);
+	EvilHangman test = new EvilHangman();
 	ArrayList<Character> guesses;
 
 	/**
@@ -38,7 +37,7 @@ public class GuessedWordTest {
 		guesses.add('a');
 		guesses.add('r');
 		
-		assertTrue(message, test.guessedWord("Start", guesses));
+		assertTrue(message, test.guessedWord("start", guesses));
 	}
 	
 	@Test
@@ -55,7 +54,7 @@ public class GuessedWordTest {
 		guesses.add('f');
 		guesses.add('g');
 		
-		assertTrue(message, test.guessedWord("Start", guesses));
+		assertTrue(message, test.guessedWord("start", guesses));
 	}
 	
 	@Test

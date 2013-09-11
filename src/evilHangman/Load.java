@@ -35,7 +35,7 @@ public class Load {
                fileReader = new FileReader(fileName);
         }
         catch(FileNotFoundException e) {
-            UserInteraction.printToScreen("Program cannot find dictionary file:"+fileName);
+            UserInteraction.printToScreen("\nProgram cannot find dictionary file:"+fileName);
             System.exit(0);
         }
         bufferedReader = new BufferedReader(fileReader);

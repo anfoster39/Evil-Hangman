@@ -11,10 +11,19 @@ import java.util.HashMap;
  *
  */
 public class Main {
-	
+	public static HashMap <Integer, ArrayList<String>> dictionary;
 
 	public static void main(String[] args){
-		EvilHangman game = new EvilHangman(args[1]);
+		EvilHangman game;
+		if(args.length > 1){
+			dictionary = Load.loadDictionary("dictionary.txt");
+			}
+		else{
+			UserInteraction.printToScreen("No Dictionary file specified, using the dictionary.txt located in current directory");
+			dictionary = Load.loadDictionary("dictionary.txt");
+		}
+		game = new EvilHangman(dictionary);
+		game.play();
 	}
 
 }

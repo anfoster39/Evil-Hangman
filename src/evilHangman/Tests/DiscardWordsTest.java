@@ -5,9 +5,6 @@ package evilHangman.Tests;
 
 import static org.junit.Assert.*;
 
-import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
-import java.io.PrintStream;
 import java.util.ArrayList;
 
 import org.junit.Before;
@@ -20,10 +17,7 @@ import evilHangman.EvilHangman;
  *
  */
 public class DiscardWordsTest {
-	private final ByteArrayOutputStream printMessage = new ByteArrayOutputStream();
-	private final InputStream stdin = System.in;
-	
-	EvilHangman test = new EvilHangman(null);
+	EvilHangman test = new EvilHangman();
 	
 	ArrayList<String> wordList;
 
@@ -32,15 +26,13 @@ public class DiscardWordsTest {
 	 */
 	@Before
 	public void setUp() throws Exception {
-		System.setOut(new PrintStream(printMessage));
-		
 		wordList = new ArrayList<String>();
 		wordList.add("cat");
 		wordList.add("hat");
 		wordList.add("dog");
 		wordList.add("god");
 		wordList.add("boy");
-		wordList.add("toy");
+		wordList.add("TOY");
 		wordList.add("lit");
 		wordList.add("let");
 		
@@ -61,19 +53,20 @@ public class DiscardWordsTest {
 	
 	@Test
 	public void NoEliminationsTest() {
-		String message = new String ("Eliniate words without letter");
+		String message = new String ("Did not return list that was the same as the input list");
 		
-		ArrayList<String> expectedResult = new ArrayList<String>();
-		expectedResult.add("cat");
-		expectedResult.add("hat");
-		expectedResult.add("dog");
-		expectedResult.add("god");
-		expectedResult.add("boy");
-		expectedResult.add("toy");
-		expectedResult.add("lit");
-		expectedResult.add("let");
+		assertEquals(message, wordList, test.discardWords(wordList, 'z'));
+	}
+	
+	@Test
+	public void returnNullTest() {
+		String message = new String ("Did not return null if all words would be eliminated");
 		
-		assertEquals(message, expectedResult, test.discardWords(wordList, 'z'));
+		wordList.remove("dog");
+		wordList.remove("god");
+		wordList.remove("boy");
+		
+		assertNull(message, test.discardWords(wordList, 't'));
 	}
 
 }
